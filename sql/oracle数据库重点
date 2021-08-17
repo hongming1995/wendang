@@ -1,1 +1,41 @@
-1.<foreach>标签：循环list中的数据;
+1.merge into 表名 using (<foreach> select * from dual </foreach>)
+on (条件)
+when matched then (满足条件) update set ...
+when not matched then (不满足条件) insert (...)
+
+2.wm_concat() 函数：讲多个字段值拼接到一行，中间用逗号隔开。必须配合group by 一起使用
+
+3.decode(表达式a, b,c,d):当a=b，返回c，否则返回d
+
+4. || 符号的使用，拼接的作用
+
+5.val(a,b) 和 val2(表达式a,b,c)
+val(a,b):如果a不为空，则返回a的值，否则返回b的值
+val2(表达式a,b,c)：表达式a不为空，则返回b的值，否则返回c的值
+
+6.数据库中的查询当前和下级数据
+select * from 表名
+start with 字段a="数据"
+connect by prior 字段a=字段b
+从字段a="数据"开始，查询字段a=字段b中表里面所有数据
+
+7.row_number over(partition by a,b,c,d order d desc) as num
+将字段a,b,c,d进行分组，按照d降序(降序的作用是为了取一条最新的数据)
+作用：如果表temp中，五个字段a，b,c,d,e 。其中a,b,c,d,e 一样作为一组，
+如果e不一样，其他一样，取e最新的一条即可。
+select m.* from (
+    select a,b,c,d,e,row_number over(partition by a,b,c,d order d desc) as num
+    from temp
+) m
+where m = 1
+注：m取几，则是第几条数据
+
+8.存储过程
+create or replace procedure temp(参数a,参数b,...)
+as 定义参数
+begin
+内容
+end temp
+
+9.sql优化
+
