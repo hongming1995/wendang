@@ -1,0 +1,4 @@
+1.ThreadLocal:是一个线程内的局部变量。多个线程之间的变量互不影响
+
+2.每个线程中都会再ThreadLocal中创建一个ThreadLocalMap副本变量，
+使用hashCode作为key，[] Entry作为key，Entry中放置的key是这个线程对象，value为当前塞入的值
