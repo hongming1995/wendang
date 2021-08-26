@@ -38,4 +38,30 @@ begin
 end temp
 
 9.sql优化
+a.使用instr(字段,#{参数}) > 0 替换 like
+如果字段有索引，使用instr对索引有效，而like无效
+查询存在大数据量，instr比like效率高 测试（账户表：使用like用了0.72，使用instr用了0.34）
+
+b.使用exists 和 not exists 替换 in 和 not in
+在子查询的时候替换，如果是数字类型的范围，可以使用between and
+
+c.在where和order by 上添加索引
+
+d.几个大数据表关联查询，可以先将表通过查询条件作为临时表，这样查询数据会减少，再进行关联查询。
+可以使用with 临时表 as()
+
+e.查询不要用*，用需要查询的字段
+
+f.使用or关联的子查询，可以使用union all
+
+10.将表a中test字段更新到表b中的name字段中，需要表a中id等于表b中aid字段，表b中name不等于表a的test
+方法一：update (select a.test,b.name from 表a a,表b b where a.test != b.name and a.id = b.aid) t
+set name = test
+方法二：update 表b set b.name = select a.test from 表a a left join 表b b
+on a.id = b.aid and a.test != b.name
+where ...
+这种方法表示疑问???
+
+方法三:update 表b b set b.name = a.test from 表a a where a.id = b.aid and a.test != b.name
+
 
