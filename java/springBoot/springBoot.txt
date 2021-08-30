@@ -1,0 +1,54 @@
+1.注解含义
+@ConfigurationProperties：用于实体类上
+prefix = "person"：表示配置文件文件person属性注射到此实体类中
+但是用在的实体类必须在spring容器中，所以需要在类上加上@Component注解
+
+@Value：用于属性值上（也就是变量中）
+@Value("${person.lastName}") 需要表示配置文件中属性名，而且大小写都不能错
+此注解不需要把这个类注入到spring容器中
+
+@PropertySource ：用于读取配置文件，放在类上
+如：@PropertySource(value = "classpath:person.properties")
+
+@ImportResource(locations = {"classpath:/beans.xml"})
+将beans.xml配置文件加载到项目中
+
+2.springboot添加了全注解的方式
+@Configuration放在类上，然后在方法上添加@Bean注解，
+这些方法会被 AnnotationConfigApplicationContext 或 AnnotationConfigWebApplicationContext 类扫描，
+构建 bean 定义。这个定义的方法返回值，会注入到spring容器中
+
+3.springBoot配置文件加载循序
+序号越小优先级越高。其次，位于相同位置的 application.properties 的优先级高于 application.yml
+
+4.spring.properties配置文件中修改日志格式
+#日志级别
+logging.level.net.biancheng.www=info
+#使用相对路径的方式设置日志输出的位置（项目根目录目录\my-log\mylog\spring.log）
+#logging.file.path=my-log/myLog
+#控制台日志输出格式
+logging.pattern.console=%d{yyyy-MM-dd hh:mm:ss} [%thread] %-5level %logger{50} - %msg%n
+%-5level:日志级别展示
+%logger：日志所在位置
+%msg：显示的日志内容
+%n：换行
+#日志文件输出格式
+logging.pattern.file=%d{yyyy-MM-dd} === [%thread] === %-5level === %logger{50} === - %msg%n
+
+5.springboot整合spring mvc
+使用WebMvcConfigurer接口整合，其中有多个方法：
+addViewControllers：用于登录路径拦截，必须访问你提供的路径
+viewControllerRegistry.addViewController("/").setViewName("login");
+访问的路径为/ 直接跳转到login中
+
+类上加@EnableWebMvc 注解，表示全部接管spring mvc
+
+6.@ControllerAdvice ：是springBoot中全局错误的注解
+@ExceptionHandler：方法上添加哪一个类的class文件，出现错误会进入这里
+
+7.springBoot整合mybatis
+配置文件中添加 mapper.xml的路径
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+@MapperScan：在springBoot主启动类上面添加路径，则可以每个Mapper接口上面不需要添加@Mapper注解
