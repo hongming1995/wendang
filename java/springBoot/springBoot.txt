@@ -52,3 +52,5 @@ mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
 
 @MapperScan：在springBoot主启动类上面添加路径，则可以每个Mapper接口上面不需要添加@Mapper注解
+
+8.@EnableAutoConfiguration
